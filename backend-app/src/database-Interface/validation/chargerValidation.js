@@ -77,7 +77,7 @@ module.exports = function({}) {
             ValidationErrors.push("invalidStatus")
         } else {
             if (typeof status !== 'number') {
-                validationErrors.push("invalidDataType")
+                ValidationErrors.push("invalidDataType")
             }
             if (status < STATUS_MIN_VALUE || status > STATUS_MAX_VALUE) {
                 ValidationErrors.push("invalidStatus")
