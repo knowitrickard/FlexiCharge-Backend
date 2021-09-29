@@ -9,7 +9,25 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                 console.log("Charger with ID: " + chargerID + " connected to the system.")
                 console.log("Number of connected chargers: " + v.getLengthConnectedSockets() + " (" + v.getLengthChargerSerials() + ")" + " (" + v.getLengthChargerIDs() + ")")
                 if (messageChache != "") {
-                    messageHandler.handleMessage(messageChache, clientSocket, chargerID)
+
+                    /*****************************************
+                    used for internal testing, remove before production
+                    *****************************************/
+                    let data = JSON.parse(message)
+                    let messageTypeID = data[0]
+
+                    if (messageTypeID == c.SSB) {
+                        test.testSSB()
+                    }
+                    else if (messageTypeID == c.CHARGER_PLUS) {
+                        test.testChargerPlus()
+                    }
+                    /*****************************************/
+
+                    else{
+                        messageHandler.handleMessage(messageChache, clientSocket, chargerID)
+                    }
+
                 }
 
             } else {
@@ -30,12 +48,15 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                 *****************************************/
                 let data = JSON.parse(message)
                 let messageTypeID = data[0]
-                
-                if (messageTypeID == c.TEST) {
-                    test.test()
+
+                if (messageTypeID == c.SSB) {
+                    test.testSSB()
+                }
+                else if (messageTypeID == c.CHARGER_PLUS) {
+                    test.testChargerPlus()
                 }
                 /*****************************************/
-                
+
                 else {
                     messageHandler.handleMessage(message, clientSocket, v.getChargerID(chargerSerial))
                 }
