@@ -54,8 +54,6 @@ module.exports = function({ databaseInit }) {
                     charger.chargerID = 100000;
                 }
 
-                console.log(charger);
-
                 databaseInit.Chargers.create(charger)
                     .then(createdCharger => callback([], createdCharger.chargerID))
                     .catch(e => {
