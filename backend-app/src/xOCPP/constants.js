@@ -4,9 +4,9 @@ module.exports = function({}){
         
         const constants = {
             INVALID_ID: "InvalidId",
+            SSB: 0,
+            CHARGER_PLUS: 1,
             TEST: 999,
-            SSB:0,
-            CHARGER_PLUS:1,
 
             HEART_BEAT_INTERVALL: 86400, //24h
             RESERVATION_TIME: 15, //15sec

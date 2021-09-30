@@ -2,18 +2,18 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
     const c = constants.get()
     exports.handleClient = function (clientSocket, chargerSerial) {
 
-        var messageChache = ""
+        var messageCache = ""
 
         isValidClient(clientSocket, chargerSerial, function (chargerID) {
             if (chargerID) {
                 console.log("Charger with ID: " + chargerID + " connected to the system.")
                 console.log("Number of connected chargers: " + v.getLengthConnectedSockets() + " (" + v.getLengthChargerSerials() + ")" + " (" + v.getLengthChargerIDs() + ")")
-                if (messageChache != "") {
+                if (messageCache != "") {
 
                     /*****************************************
                     used for internal testing, remove before production
                     *****************************************/
-                    let data = JSON.parse(message)
+                    let data = JSON.parse(messageCache)
                     let messageTypeID = data[0]
 
                     if (messageTypeID == c.SSB) {
@@ -25,7 +25,7 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                     /*****************************************/
 
                     else{
-                        messageHandler.handleMessage(messageChache, clientSocket, chargerID)
+                        messageHandler.handleMessage(messageCache, clientSocket, chargerID)
                     }
 
                 }
@@ -62,7 +62,7 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                 }
 
             } else {
-                messageChache = message
+                messageCache = message
             }
         })
     }

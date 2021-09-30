@@ -1,4 +1,4 @@
-module.exports = function ({ ocppInterface, databaseInterfaceCharger }) {
+module.exports = function ({ ocppInterface }) {
 
 
     exports.testSSB = function () {
