@@ -3,7 +3,7 @@ module.exports = function({ dataAccessLayerCharger, dbErrorCheck, chargerValidat
     const exports = {}
 
 
-    exports.getChargers = function(callback) {
+    exports.getChargers = function (callback) {
         dataAccessLayerCharger.getChargers(function(error, chargers) {
             if (Object.keys(error).length > 0) {
                 dbErrorCheck.checkError(error, function(errorCode) {
