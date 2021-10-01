@@ -93,10 +93,8 @@ module.exports = function ({ constants, func, v, databaseInterfaceCharger }) {
                 }
                 break
 
-            case c.START_TRANSACTION:
-                //todo
-                callResult = getCallResultNotImplemeted(uniqueID, action)
-                break
+                case c.START_TRANSACTION:
+                    //todo
 
             case c.STOP_TRANSACTION:
                 //todo
@@ -156,6 +154,16 @@ module.exports = function ({ constants, func, v, databaseInterfaceCharger }) {
                         })
                     }
     
+                    break
+
+                case c.StartTransaction:
+
+                    break
+                case c.StartTransaction:
+                    let uniqueId = Math.random();
+                    callResult = func.buildJSONMessage([c.CALL_RESULT, {statusFromAuth}
+                        "Tell OCPP gang that error *no chargerID in callSwitch -> BOOT_NOTIFICATION* occured :)", {}])
+                    clientSocket.send(callResult)
                     break
     
                 default:

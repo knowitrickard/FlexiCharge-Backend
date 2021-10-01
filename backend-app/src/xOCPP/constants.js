@@ -16,8 +16,8 @@ module.exports = function({}){
             CALL_ERROR: 4,
 
             BOOT_NOTIFICATION: "BootNotification",
-            START_TRANSACTION: "startTransaction",
-            STOP_TRANSACTION: "stopTransaction",
+            START_TRANSACTION: "StartTransaction",
+            STOP_TRANSACTION: "StopTransaction",
             INTERNAL_ERROR: "InternalError",
             NOT_IMPLEMENTED: "NotImplemented",
             GENERIC_ERROR: "GenericError",
