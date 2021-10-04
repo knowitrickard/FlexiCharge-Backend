@@ -48,7 +48,8 @@ module.exports = function ({ constants, func, v, databaseInterfaceCharger }) {
                     let uniqueID = func.getUniqueId(chargerID, action)
                     message = func.buildJSONMessage([
                         c.CALL,
-                        uniqueID, {
+                        uniqueID,
+                        c.RESERVE_NOW, {
                             connectorID: dataObject.connectorID,
                             expiryDate: Date.now()+c.RESERVATION_TIME,
                             idTag: dataObject.idTag,
