@@ -24,11 +24,11 @@ module.exports = function ({ v, constants }) {
     }
 
     exports.getCallResultNotImplemeted = function (uniqueID, operation) {
-        return buildJSONMessage([c.CALL_ERROR, uniqueID, c.NOT_IMPLEMENTED, "The *" + operation + "* function is not implemented yet.", {}])
+        return exports.buildJSONMessage([c.CALL_ERROR, uniqueID, c.NOT_IMPLEMENTED, "The *" + operation + "* function is not implemented yet.", {}])
     }
 
     exports.getGenericError = function (uniqueID, errorDescription) {
-        return buildJSONMessage([c.CALL_ERROR, uniqueID, c.GENERIC_ERROR, errorDescription, {}])
+        return exports.buildJSONMessage([c.CALL_ERROR, uniqueID, c.GENERIC_ERROR, errorDescription, {}])
     }
 
 
