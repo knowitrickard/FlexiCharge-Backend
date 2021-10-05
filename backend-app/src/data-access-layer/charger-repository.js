@@ -43,7 +43,7 @@ module.exports = function({ databaseInit }) {
             chargePointID: chargePointId,
             serialNumber: serialNumber,
             location: location,
-            status: 'Occupied'
+            status: 'Reserved'
         }
 
         databaseInit.Chargers.max("chargerID")

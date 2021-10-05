@@ -1,5 +1,5 @@
 
-module.exports = function({ v, constants, messageHandler }) {
+module.exports = function({ v, constants, messageHandler, interfaceHandler, func }) {
     const c = constants.get()
     
     exports.startTransaction = function(transactionID, chargerID){
@@ -23,18 +23,15 @@ module.exports = function({ v, constants, messageHandler }) {
     //othervise it will be one of this responses: "Faulted", "Occupied", "Rejected" or "Unavailable".
     exports.reserveNow = function(chargerID, connectorID, idTag, reservationID, parentIdTag, callback){
 
-        //to do, not working
-        console.log("Incoming request from API: reserveNow -> chargerId;"+chargerID)
+        console.log("Incoming request from API: reserveNow -> chargerId:"+chargerID)
 
         const dataObject = {
             connectorID: connectorID,
             idTag: idTag,
-            reservationID: reservationID,
+            reservationID: func.getReservationID(chargerID, idTag, connectorID),
             parentIdTag: parentIdTag
         }
-        messageHandler.interfaceHandler(chargerID, c.RESERVE_NOW, dataObject, function(response, error){
-            callback(response, error)
-        })
+        interfaceHandler.interfaceHandler(chargerID, c.RESERVE_NOW, dataObject, callback)
     }
 
     

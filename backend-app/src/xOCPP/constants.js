@@ -15,6 +15,12 @@ module.exports = function({}){
             CALL_RESULT: 3,
             CALL_ERROR: 4,
 
+            //Used in call and results, not in errors
+            MESSAGE_TYPE_INDEX: 0,
+            UNIQUE_ID_INDEX: 1,
+            ACTION_INDEX: 2,
+            PAYLOAD_INDEX: 3,
+
             BOOT_NOTIFICATION: "BootNotification",
             START_TRANSACTION: "startTransaction",
             STOP_TRANSACTION: "stopTransaction",
@@ -23,6 +29,19 @@ module.exports = function({}){
             GENERIC_ERROR: "GenericError",
             SECURITY_ERROR: "SecurityError",
             RESERVE_NOW: "ReserveNow",
+
+            //Possible status states a charger can have
+            AVAILABLE: "Available",
+            PREPARING: "Preparing",
+            CHARGING: "Charging",
+            SUSPENDEDEVSE: "SuspendedEVSE",
+            SUSPENDEDEV: "SuspendedEV",
+            FINISHING: "Finishing",
+            RESERVED: "Reserved",
+            UNAVAILBLE: "Unavailable",
+            FAULTED: "Faulted",
+
+            //Possible answers for ReservNow response
             ACCEPTED: "Accepted",
             FAULTED: "Faulted",
             OCCUPIED: "Occupied",
