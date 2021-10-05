@@ -13,10 +13,7 @@ module.exports = function({ databaseInterfaceCharger, databaseInterfaceReservati
 
     router.get("/check", async function(request, response) {
 
-
-
         switch ('transaction') {
-
             case 'chargePoints':
 
                 const chargePoint = {
@@ -152,22 +149,22 @@ module.exports = function({ databaseInterfaceCharger, databaseInterfaceReservati
                 break;
             case 'reservation':
                 const reservation = {
-                    reservationID: 1,
-                    userID: 1,
-                    chargerID: 1,
-                    start: 1,
-                    end: 4
+                    reservationID: 2,
+                    userID: "hejhallå",
+                    chargerID: 2,
+                    start: 4,
+                    end: 10
                 }
 
-                databaseInterfaceReservations.getReservationForCharger(reservation.chargerID, function(errors, chargerReservation) {
-                    console.log(errors)
-                    console.log(chargerReservation)
-                    databaseInterfaceReservations.removeReservation(55, function(errors, reservation) {
-                        console.log(errors)
-                        console.log(reservation)
-                        response.redirect("/")
-                    })
-                })
+                // databaseInterfaceReservations.getReservationForCharger(reservation.chargerID, function(errors, chargerReservation) {
+                //     console.log(errors)
+                //     console.log(chargerReservation)
+                //     databaseInterfaceReservations.removeReservation(55, function(errors, reservation) {
+                //         console.log(errors)
+                //         console.log(reservation)
+                //         response.redirect("/")
+                //     })
+                // })
 
                 // databaseInterfaceReservations.getReservationForUser(reservation.userID, function(errors, userReservation) {
                 //     console.log(errors)
@@ -198,6 +195,7 @@ module.exports = function({ databaseInterfaceCharger, databaseInterfaceReservati
 
                 const transaction = {
                     transactionID: 2,
+                    userID: "vemedu",
                     chargerID: 1,
                     isKlarnaPayment: true,
                     pricePerKwh: 45.66,

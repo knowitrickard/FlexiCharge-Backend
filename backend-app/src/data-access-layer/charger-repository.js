@@ -30,7 +30,7 @@ module.exports = function({ databaseInit }) {
     }
 
     exports.getAvailableChargers = function(callback) {
-        databaseInit.Chargers.findAll({ where: { status: 1 }, raw: true })
+        databaseInit.Chargers.findAll({ where: { status: 'Available' }, raw: true })
             .then(chargers => callback([], chargers))
             .catch(e => {
                 console.log(e)
@@ -43,12 +43,12 @@ module.exports = function({ databaseInit }) {
             chargePointID: chargePointId,
             serialNumber: serialNumber,
             location: location,
-            status: 0
+            status: 'Occupied'
         }
 
         databaseInit.Chargers.max("chargerID")
-            .then(function(biggestChargerID){
-                if(biggestChargerID != undefined && biggestChargerID != null && biggestChargerID != NaN && biggestChargerID >= 100000) {
+            .then(function(biggestChargerID) {
+                if (biggestChargerID != undefined && biggestChargerID != null && biggestChargerID != NaN && biggestChargerID >= 100000) {
                     charger.chargerID = biggestChargerID + 1;
                 } else {
                     charger.chargerID = 100000;
@@ -58,7 +58,7 @@ module.exports = function({ databaseInit }) {
                     .then(createdCharger => callback([], createdCharger.chargerID))
                     .catch(e => {
                         if (!e.errors === undefined) {
-                            if(e.errors[0].message == "chargerID must be unique") {
+                            if (e.errors[0].message == "chargerID must be unique") {
                                 charger.chargerID = parseInt(e.errors[0].value) + 1;
                                 databaseInit.Chargers.create(charger)
                                     .then(createdCharger => callback([], createdCharger.chargerID))
@@ -79,7 +79,7 @@ module.exports = function({ databaseInit }) {
             .catch(e => {
                 console.log(e)
                 callback(e, [])
-            })        
+            })
     }
 
     exports.removeCharger = function(chargerId, callback) {

@@ -25,6 +25,7 @@ container.register({
     chargePointValidation: awilix.asFunction(require("./database-Interface/validation/chargePointValidation")),
 
     //Presentation layers
+    chargePointsRouter: awilix.asFunction(require('./presentation-layer/charge-point-router-api')),
     chargersRouter: awilix.asFunction(require('./presentation-layer/chargers-router-api')),
     transactionsRouter: awilix.asFunction(require('./presentation-layer/transactions-router-api')),
     reservationsRouter: awilix.asFunction(require('./presentation-layer/reservations-router-api')),
@@ -41,7 +42,6 @@ container.register({
     v: awilix.asFunction(require('./xOCPP/variables')),
     func: awilix.asFunction(require('./xOCPP/global_functions')),
     test: awilix.asFunction(require('./xOCPP/test')),
-
 
     app: awilix.asFunction(require('./presentation-layer/app'))
 })

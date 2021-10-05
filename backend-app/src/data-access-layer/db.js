@@ -33,7 +33,7 @@ const Chargers = sequelize.define('Chargers', {
         allowNull: false
     },
     status: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     }
 }, {
@@ -56,7 +56,7 @@ const Reservations = sequelize.define('Reservations', {
         allowNull: false
     },
     userID: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false
     }
 }, {
@@ -95,7 +95,7 @@ const Transactions = sequelize.define('Transactions', {
         allowNull: true
     },
     userID: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
     }
 }, {
@@ -155,14 +155,14 @@ sequelize.sync().then(function() {
             //     chargerID: 100000,
             //     location: [57.777714, 14.163012],
             //     serialNumber: 'abc123',
-            //     status: 1,
+            //     status: '1',
             //     chargePointID: 1
             // });
             // Chargers.create({
             //     chargerID: 100001,
             //     location: [57.777714, 14.163016],
             //     serialNumber: '123abc',
-            //     status: 0,
+            //     status: '0',
             //     chargePointID: 1
             // });
             Transactions.create({

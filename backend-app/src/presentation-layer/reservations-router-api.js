@@ -2,7 +2,7 @@ const express = require('express')
 const AuthMiddleware = require('./middleware/auth.middleware')
 const authMiddleware = new AuthMiddleware()
 
-module.exports = function ({ databaseInterfaceReservations }) {
+module.exports = function ({ databaseInterfaceReservations, ocppInterface }) {
 
     const router = express.Router()
 
@@ -23,15 +23,15 @@ module.exports = function ({ databaseInterfaceReservations }) {
     router.get('/userReservation/:userID', function (request, response) {
         //authMiddleware.verifyToken(request, response);
         const userId = request.params.userID
-        databaseInterfaceReservations.getReservationForUser(userId, function(error, userReservation){
-            if(error.length == 0 && userReservation.length == 0){
+        databaseInterfaceReservations.getReservationForUser(userId, function (error, userReservation) {
+            if (error.length == 0 && userReservation.length == 0) {
                 response.status(404).end()
             } else if (error.length == 0) {
                 response.status(200).json(userReservation)
             } else {
                 response.status(500).json(error)
             }
-        })    
+        })
     })
 
     router.get('/chargerReservation/:chargerID', function (request, response) {
@@ -72,6 +72,27 @@ module.exports = function ({ databaseInterfaceReservations }) {
                 response.status(404).json()
             } else {
                 response.status(500).json(errors)
+            }
+        })
+    })
+
+    router.put('/:chargerId', function (request, response) {
+        const chargerId = request.params.chargerId
+        const connectorId = request.body.connectorId
+        const idTag = request.body.idTag
+        const reservationId = request.body.reservationId
+        const parentIdTag = request.body.parentIdTag
+        ocppInterface.reserveNow(chargerId, connectorId, idTag, reservationId, parentIdTag, function (resp, error) {
+            console.log(resp);
+            console.log(error);
+            if (error === null && resp != null) {
+                response.status(201).json(resp)
+            } else {
+                if (error.includes("internalError") || error.includes("dbError")) {
+                    response.status(500).json(error)
+                } else {
+                    response.status(404).json(error)
+                }
             }
         })
     })

@@ -19,6 +19,8 @@ class CognitoService {
 
     async signUpUser(username, password, userAttributes) {
 
+        console.log(userAttributes);
+
         const params = {
             Username: username,
             Password: password,
@@ -63,7 +65,6 @@ class CognitoService {
         try {
 
             const tokens = await this.cognitoIdentity.initiateAuth(params).promise();
-            console.log(tokens);
             if (tokens.ChallengeName) {
                 return tokens
             }
@@ -147,6 +148,7 @@ class CognitoService {
 
         try {
             const res = await this.cognitoIdentity.forgotPassword(params).promise();
+            console.log(res);
             const data = {
                 data: res,
                 statusCode: 200
@@ -156,6 +158,47 @@ class CognitoService {
         } catch (error) {
             console.log(error);
             return error;
+        }
+    }
+
+    async respondToAuthChallenge(username, password, session) {
+
+        const params = {
+            "ChallengeName": "NEW_PASSWORD_REQUIRED",
+            "ChallengeResponses": {
+                "USERNAME": username,
+                "NEW_PASSWORD": password,
+                "SECRET_HASH": this.generateHash(username)
+            },
+            "ClientId": this.clientId,
+            "Session": session,
+        }
+
+        try {
+            const tokens = await this.cognitoIdentity.respondToAuthChallenge(params).promise();
+            if (tokens.ChallengeName) {
+                return tokens
+            }
+            const userdata = await auth.decodeToken(tokens.AuthenticationResult.IdToken);
+
+            const data = {
+                accessToken: tokens.AuthenticationResult.AccessToken,
+                email: userdata.email,
+                username: userdata['cognito:username'],
+                name: userdata.name,
+                family_name: userdata.family_name,
+                user_id: userdata.sub
+            }
+
+            const res = {
+                data: data,
+                statusCode: 200
+            }
+            return res
+
+        } catch (error) {
+            console.log(error);
+            return error
         }
     }
 
