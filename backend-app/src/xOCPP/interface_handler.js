@@ -1,7 +1,7 @@
 module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
     const c = constants.get()
 
-    exports.interfaceHandler = function (chargerID, action, dataObject, callback) {
+    exports.interfaceHandler = function (chargerID, action, payload, callback) {
 
         const socket = v.getConnectedSocket(chargerID)
 
@@ -12,8 +12,16 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
             switch (action) {
 
                 case c.RESERVE_NOW:
-                    message = sendReserveNowCall(chargerID, action, dataObject, callback)
+                    message = sendReserveNowCall(chargerID, action, payload, callback)
                     break
+
+                case c.REMOTE_START_TRANSACTION:
+                    message = sendRemoteStartCall(chargerID, action, payload, callback)
+                    break;
+                
+                case c.REMOTE_STOP_TRANSACTION:
+                    message = sendRemoteStopCall(chargerID, action, payload, callback)
+                    break;
             }
 
             socket.send(message)
@@ -66,13 +74,87 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
                     callback(null, status)
                 }
             })
-        }else{
+        } else {
             callback(null, status)
         }
     }
+
     /************************************************************
-     * END
+     * REMOTE START FUNCTIONS
     **************************************************************/
+    function sendRemoteStartCall(chargerID, action, dataObject, callback) {
+        let uniqueID = func.getUniqueId(chargerID, action)
+        let message = func.buildJSONMessage([
+            c.CALL,
+            uniqueID,
+            c.REMOTE_START_TRANSACTION,
+            {
+                connectorID: dataObject.connectorID,
+                idTag: dataObject.idTag,
+            }])
+        v.addCallback(uniqueID, callback)
+        return message
+    }
+
+    exports.handleRemoteStartResponse = function (chargerID, uniqueID, response) {
+        
+        let status = response[c.PAYLOAD_INDEX].status
+        console.log("\nCharger "+chargerID+" responded to RemoteStartTransaction request: "+status)
+
+        callback = v.getCallback(uniqueID)
+        v.removeCallback(uniqueID)
+
+        if (status == c.ACCEPTED) {
+            databaseInterfaceCharger.updateChargerStatus(chargerID, c.CHARGING, function (error, charger) {
+                if (error.length > 0) {
+                    console.log("Error updating charger status in DB: " + error)
+                    callback(c.INTERNAL_ERROR, null)
+                } else {
+                    console.log("Charger updated in DB: " + charger.status)
+                    callback(null, status)
+                }
+            })
+        } else {
+            callback(null, status)
+        }
+    }
+
+    /************************************************************
+     * REMOTE START FUNCTIONS
+    **************************************************************/
+    function sendRemoteStopCall(chargerID, action, payload, callback) {
+        let uniqueID = func.getUniqueId(chargerID, action)
+        let message = func.buildJSONMessage([
+            c.CALL,
+            uniqueID,
+            c.REMOTE_STOP_TRANSACTION,
+            payload
+        ])
+        v.addCallback(uniqueID, callback)
+        return message
+    }
+
+    exports.handleRemoteStopResponse = function (chargerID, uniqueID, response) {
+        let status = response[c.PAYLOAD_INDEX].status
+        console.log("\nCharger "+chargerID+" responded to RemoteStopTransaction request: "+status)
+
+        callback = v.getCallback(uniqueID)
+        v.removeCallback(uniqueID)
+
+        if (status == c.ACCEPTED) {
+            databaseInterfaceCharger.updateChargerStatus(chargerID, c.AVAILABLE, function (error, charger) {
+                if (error.length > 0) {
+                    console.log("Error updating charger status in DB: " + error)
+                    callback(c.INTERNAL_ERROR, null)
+                } else {
+                    console.log("Charger updated in DB: " + charger.status)
+                    callback(null, status)
+                }
+            })
+        } else {
+            callback(null, status)
+        }
+    }
 
     return exports
 }

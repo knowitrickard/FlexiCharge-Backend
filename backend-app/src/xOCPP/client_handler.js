@@ -11,20 +11,13 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                 if (messageCache != "") {
 
                     /*****************************************
-                    used for internal testing, remove before production
-                    *****************************************/
-                    let data = JSON.parse(messageCache)
-                    let messageTypeID = data[0]
-
-                    if (messageTypeID == c.SSB) {
-                        test.testSSB()
-                    }
-                    else if (messageTypeID == c.CHARGER_PLUS) {
-                        test.testChargerPlus()
-                    }
+                     used for internal testing, remove before production
+                     *****************************************/
+                    var test = false
+                    test = testSwitch(messageCache, clientSocket)
                     /*****************************************/
 
-                    else{
+                    if (!test) {
                         messageHandler.handleMessage(messageCache, clientSocket, chargerID)
                     }
 
@@ -45,19 +38,12 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
 
                 /*****************************************
                  used for internal testing, remove before production
-                *****************************************/
-                let data = JSON.parse(message)
-                let messageTypeID = data[0]
-
-                if (messageTypeID == c.SSB) {
-                    test.testSSB()
-                }
-                else if (messageTypeID == c.CHARGER_PLUS) {
-                    test.testChargerPlus()
-                }
+                 *****************************************/
+                var test = false
+                test = testSwitch(message, clientSocket)
                 /*****************************************/
 
-                else {
+                if (!test) {
                     messageHandler.handleMessage(message, clientSocket, v.getChargerID(chargerSerial))
                 }
 
@@ -90,5 +76,42 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
         })
     }
 
+    function testSwitch(message, clientSocket) {
+        try {
+            let data = JSON.parse(message)
+            let messageTypeID = data[0]
+
+            switch (messageTypeID) {
+
+                case c.SSB:
+                    test.testSSB()
+                    return true
+
+                case c.CHARGER_PLUS:
+                    test.testSSB()
+                    return true
+
+                case c.TEST1:
+                    test.testFreeCharger()
+                    return true
+
+                case c.TEST2:
+                    test.testRemoteStart()
+                    return true
+
+                case c.TEST3:
+                    test.testRemoteStop()
+                    return true
+
+                default:
+                    return false
+
+            }
+        } catch (error) {
+            console.log(error)
+            clientSocket.send(func.getGenericError("test error", error.toString()))
+            return true
+        }
+    }
     return exports
 }

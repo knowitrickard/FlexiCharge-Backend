@@ -22,3 +22,26 @@ To get to test function
   { 
     "status": "Accepted"
     } ]
+
+[ 3,
+  "uniqueID",
+  "RemoteStartTransaction",
+  { 
+    "status": "Accepted"
+    } ]
+
+[ 3,
+  "uniqueID",
+  "RemoteStopTransaction",
+  { 
+    "status": "Accepted"
+    } ]
+
+
+[ 3,
+  "uniqueID",
+  "StatusNotification",
+  { 
+    "errorCode: "NoError"
+    "status": "Accepted"
+    } ]
