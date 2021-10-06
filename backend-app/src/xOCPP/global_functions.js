@@ -30,7 +30,5 @@ module.exports = function ({ v, constants }) {
     exports.getGenericError = function (uniqueID, errorDescription) {
         return exports.buildJSONMessage([c.CALL_ERROR, uniqueID, c.GENERIC_ERROR, errorDescription, {}])
     }
-
-
     return exports
 }

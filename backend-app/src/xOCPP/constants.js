@@ -6,7 +6,16 @@ module.exports = function({}){
             INVALID_ID: "InvalidId",
             SSB: 0,
             CHARGER_PLUS: 1,
-            TEST: 999,
+            TEST1: "FreeCharger",
+            TEST2: "RemoteStart",
+            TEST3: "RemoteStop",
+            TEST4: "ReserveNow",
+
+            ID_TAG: 1,
+            CONNECTOR_ID: 1,
+            TRANSACTION_ID: 78934,
+            RESERVATION_ID: 34932,
+            PARENT_ID_TAG: 89347,
 
             HEART_BEAT_INTERVALL: 86400, //24h
             RESERVATION_TIME: 15, //15sec
@@ -22,8 +31,9 @@ module.exports = function({}){
             PAYLOAD_INDEX: 3,
 
             BOOT_NOTIFICATION: "BootNotification",
-            START_TRANSACTION: "startTransaction",
-            STOP_TRANSACTION: "stopTransaction",
+            STATUS_NOTIFICATION: "StatusNotification",
+            REMOTE_START_TRANSACTION: "RemoteStartTransaction",
+            REMOTE_STOP_TRANSACTION: "RemoteStopTransaction",
             INTERNAL_ERROR: "InternalError",
             NOT_IMPLEMENTED: "NotImplemented",
             GENERIC_ERROR: "GenericError",
@@ -41,12 +51,30 @@ module.exports = function({}){
             UNAVAILBLE: "Unavailable",
             FAULTED: "Faulted",
 
-            //Possible answers for ReservNow response
+            //Possible answers for ReserveNow response
             ACCEPTED: "Accepted",
             FAULTED: "Faulted",
             OCCUPIED: "Occupied",
             REJECTED: "Rejected",
-            UNAVAILABLE: "Unavailable"
+            UNAVAILABLE: "Unavailable",
+
+            //Charger error codes:
+            CONNECTOR_LOCK_FAILURE: "ConnectorLockFailure",
+            EV_COMMUNIATION_FAILURE: "EVCommunicationError",
+            GROUND_FAILURE: "GroundFailure",
+            HIGH_TEMP: "HighTemperature",
+            INTERNAL_ERROR: "InternalError",
+            LOCAL_LIST_CONFLICT: "LocalListConflict",
+            NO_ERROR: "NoError",
+            OTHER_ERROR: "OtherError",
+            OVERCURRENT_FAILURE: "OverCurrentFailure",
+            POWER_METER_FAILURE: "PowerMeterFailure",
+            POWER_SWITCH_FAILURE: "PowerSwitchFailure",
+            READER_FAILURE: "ReaderFailure",
+            RESET_FAILURE: "ResetFailure",
+            UNDERVOLTAGE: "UnderVoltage",
+            OVERVOLTAGE: "OverVoltage",
+            WEAK_SIGNAL: "WeakSignal"
 
             
         }
