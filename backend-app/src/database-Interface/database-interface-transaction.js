@@ -126,7 +126,7 @@ module.exports = function({ dataAccessLayerTransaction, transactionValidation, d
                         dataAccessLayerKlarna.getNewKlarnaPaymentSession(userID, chargerID, chargePoint, function(error, transactionData) {
                             if (error.length == 0) {
                                 const validationError = transactionValidation.addKlarnaTransactionValidation(transactionData.session_id, transactionData.client_token, transactionData.payment_method_categories)
-                                if (validationError){
+                                if (validationError.length > 0){
                                     callback(validationError, [])
                                 } else {
                                     const paymentConfirmed = false
@@ -144,7 +144,6 @@ module.exports = function({ dataAccessLayerTransaction, transactionValidation, d
                                     })
                                 }
                             } else {
-                                console.log("error")
                                 callback(error, [])
                             }
                         })

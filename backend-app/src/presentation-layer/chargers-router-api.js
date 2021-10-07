@@ -15,7 +15,7 @@ module.exports = function ({ databaseInterfaceCharger }) {
         })
     })
     router.get('/available', function (request, response) {
-
+    
         databaseInterfaceCharger.getAvailableChargers(function (errors, chargers) {
             if (errors.length > 0) {
                 response.status(404).json(errors)

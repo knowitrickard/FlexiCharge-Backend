@@ -6,14 +6,14 @@ const { createHmac } = require('crypto')
 const path = require('path')
 const dirPath = path.join(__dirname, '/config.json')
 
-// AWS.config.loadFromPath(dirPath);
-// AWS.config.getCredentials(function (err) {
-//     if (err) console.log(err.stack);
-//     // credentials not loaded
-//     else {
-//         // console.log("Access key:", AWS.config.credentials.accessKeyId);
-//     }
-// });
+AWS.config.loadFromPath(dirPath);
+AWS.config.getCredentials(function (err) {
+    if (err) console.log(err.stack);
+    // credentials not loaded
+    else {
+        // console.log("Access key:", AWS.config.credentials.accessKeyId);
+    }
+});
 
 class AdminCognitoService {
 
