@@ -109,7 +109,7 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
     router.post('/session', function (request, response) {
         const userID = request.body.userID
         const chargerID = request.body.chargerID
-        
+
         databaseInterfaceTransactions.getNewKlarnaPaymentSession(userID, chargerID, function (error, klarnaSessionTransaction) {
             if (error.length > 0) {
                 response.status(400).json(error)
@@ -124,7 +124,7 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
     router.put('/stop/:transactionID', function (request, response) {
         const transactionID = request.params.transactionID
         const chargerID = request.body.chargerID
-        ocppInterface.remoteStopTransaction(transactionID, chargerID, function(error, stoppedTransaction){
+        ocppInterface.remoteStopTransaction(transactionID, chargerID, function (error, stoppedTransaction) {
             if (error.length > 0) {
                 response.status(400).json(error)
             } else if (stoppedTransaction) {

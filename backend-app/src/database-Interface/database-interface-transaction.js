@@ -1,3 +1,5 @@
+const { checkPrime } = require("crypto")
+
 module.exports = function({ dataAccessLayerTransaction, transactionValidation, dbErrorCheck, dataAccessLayerCharger, dataAccessLayerChargePoint, dataAccessLayerKlarna }) {
 
     const exports = {}
@@ -117,38 +119,42 @@ module.exports = function({ dataAccessLayerTransaction, transactionValidation, d
                     callback(errorCode, [])
                 })
             } else {
-                dataAccessLayerChargePoint.getChargePoint(1, async function(error, chargePoint) { //TODO: Change hardcoded 1 to charger.chargePointID
-                    if (Object.keys(error).length > 0) {
-                        dbErrorCheck.checkError(error, function(errorCode) {
-                            callback(errorCode, [])
-                        })
-                    } else {
-                        dataAccessLayerKlarna.getNewKlarnaPaymentSession(userID, chargerID, chargePoint, function(error, transactionData) {
-                            if (error.length == 0) {
-                                const validationError = transactionValidation.addKlarnaTransactionValidation(transactionData.session_id, transactionData.client_token, transactionData.payment_method_categories)
-                                if (validationError.length > 0){
-                                    callback(validationError, [])
-                                } else {
-                                    const paymentConfirmed = false
-                                    const isKlarnaPayment = true
-                                    const timestamp = (Date.now() / 1000 | 0)
+                if(charger != null) {
+                    dataAccessLayerChargePoint.getChargePoint(charger.chargePointID, async function(error, chargePoint) {
+                        if (Object.keys(error).length > 0) {
+                            dbErrorCheck.checkError(error, function(errorCode) {
+                                callback(errorCode, [])
+                            })
+                        } else {
+                            dataAccessLayerKlarna.getNewKlarnaPaymentSession(userID, chargerID, chargePoint, async function(error, transactionData) {
+                                if (error.length == 0) {
+                                    const validationError = transactionValidation.addKlarnaTransactionValidation(transactionData.session_id, transactionData.client_token, transactionData.payment_method_categories)
+                                    if (validationError.length > 0) {
+                                        callback(validationError, [])
+                                    } else {
+                                        const paymentConfirmed = false
+                                        const isKlarnaPayment = true
+                                        const timestamp = (Date.now() / 1000 | 0)
 
-                                    dataAccessLayerTransaction.addKlarnaTransaction(userID, chargerID, chargePoint.price, transactionData.session_id, transactionData.client_token, transactionData.payment_method_categories, isKlarnaPayment, timestamp, paymentConfirmed, function(error, klarnaTransaction) {
-                                        if (Object.keys(error).length > 0) {
-                                            dbErrorCheck.checkError(error, function(error) {
-                                                callback(error, [])
-                                            })
-                                        } else {
-                                            callback([], klarnaTransaction)
-                                        }
-                                    })
+                                        dataAccessLayerTransaction.addKlarnaTransaction(userID, chargerID, chargePoint.price, transactionData.session_id, transactionData.client_token, transactionData.payment_method_categories, isKlarnaPayment, timestamp, paymentConfirmed, function(error, klarnaTransaction) {
+                                            if (Object.keys(error).length > 0) {
+                                                dbErrorCheck.checkError(error, function(error) {
+                                                    callback(error, [])
+                                                })
+                                            } else {
+                                                callback([], klarnaTransaction)
+                                            }
+                                        })
+                                    }
+                                } else {
+                                    callback(error, [])
                                 }
-                            } else {
-                                callback(error, [])
-                            }
-                        })
-                    }
-                })
+                            })
+                        }
+                    })
+                } else {
+                    callback(["invalidChargerId"], [])
+                }
             }
         })
     }
@@ -161,7 +167,7 @@ module.exports = function({ dataAccessLayerTransaction, transactionValidation, d
                     callback(errorCode, [])
                 })
             } else { //Mock transaction data with a charger id cant be created in development
-                dataAccessLayerCharger.getCharger( /*transaction.chargerID*/ 100000, function(error, charger) {
+                dataAccessLayerCharger.getCharger(transaction.chargerID, function(error, charger) {
                     if (Object.keys(error).length > 0) {
                         dbErrorCheck.checkError(error, function(errorCode) {
                             callback(errorCode, [])
@@ -240,7 +246,6 @@ module.exports = function({ dataAccessLayerTransaction, transactionValidation, d
             }
         })
     }
-
 
     return exports
 }

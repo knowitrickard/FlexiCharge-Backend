@@ -5,6 +5,7 @@ module.exports = function({}) {
     const exports = {}
 
     exports.getNewKlarnaPaymentSession = async function(userID, chargerID, chargePoint, callback) {
+
         if (chargePoint.klarnaReservationAmount > 0) {
             const data = new TextEncoder().encode(
                 JSON.stringify({
@@ -16,6 +17,7 @@ module.exports = function({}) {
                     "order_lines": getOrderLines(chargePoint.klarnaReservationAmount)
                 })
             )
+            console.log(Buffer.from(data).toString());
 
             const options = {
                 hostname: KLARNA_URI,

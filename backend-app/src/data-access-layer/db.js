@@ -114,7 +114,7 @@ const Transactions = sequelize.define('Transactions', {
     paymentConfirmed: {
         type: DataTypes.BOOLEAN,
         allowNull: true
-    }
+    },
 }, {
     timestamps: false
 });
