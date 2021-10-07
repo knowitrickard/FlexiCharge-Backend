@@ -17,7 +17,6 @@ module.exports = function({}) {
                     "order_lines": getOrderLines(chargePoint.klarnaReservationAmount)
                 })
             )
-            console.log(Buffer.from(data).toString());
 
             const options = {
                 hostname: KLARNA_URI,
