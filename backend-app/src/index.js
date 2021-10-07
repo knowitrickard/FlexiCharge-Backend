@@ -35,7 +35,10 @@ container.register({
     //ocpp
     ocpp: awilix.asFunction(require('./xOCPP/server_ocpp')),
     ocppInterface: awilix.asFunction(require('./xOCPP/interface')),
+<<<<<<< HEAD
     interfaceHandler: awilix.asFunction(require('./xOCPP/interface_handler')),
+=======
+>>>>>>> 0c8778de345796d5dd7bb56906a0182ee39f93a1
     clientHandler: awilix.asFunction(require('./xOCPP/client_handler')),
     messageHandler: awilix.asFunction(require('./xOCPP/message_handler')),
     constants: awilix.asFunction(require('./xOCPP/constants')),
