@@ -1,5 +1,4 @@
 var express = require('express')
-const bodyParser = require('body-parser')
 
 const CognitoService = require('./services/cognito.config')
 
@@ -13,7 +12,6 @@ module.exports = function () {
 
         // This might cause issues
         // If username is not sent with the request sets the username of the email as username
-        // apparently mobile doesnt want username as a field and I cant change it in cognito
         username = username == undefined ? email.split('@')[0] : username
 
         let userAttributes = [];

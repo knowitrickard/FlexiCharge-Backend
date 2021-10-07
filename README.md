@@ -36,7 +36,7 @@ module.exports = function({ databaseInterfaceCharger}) {
   - addCharger(chargerPointId: int, function(errors, chargerId))
   - getCharger(chargerId: int, function(errors, charger))
   - removeCharger(chargerId: int, function(errors, chargerRemoved: bool)) 
-  - updateChargerStatus(chargerId: int, status: int, function(errors, updatedCharger)) //status: "Available","Preparing","Charging","SuspendedEVSE","SuspendedEV","Finishing","Reserved","Unavailable","Faulted"
+  - updateChargerStatus(chargerId: int, status: int, function(errors, updatedCharger)) //status: 0: Occupied, 1: Available, 2: Reserved, 3: Faulty
   - getChargers(function(errors, chargers)) 
   - getAvailableChargers(function(errors, availableChargers))
   - getChargerBySerialNumber(serialNumber:string,function(error, charger)) //OCPP Only

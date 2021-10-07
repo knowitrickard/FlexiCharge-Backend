@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk')
 const { createHmac } = require('crypto')
-const AuthMiddleware = require('../middleware/auth.middleware')
-const auth = new AuthMiddleware();
+// const AuthMiddleware = require('../middleware/auth.middleware')
+// const auth = new AuthMiddleware();
 
 class CognitoService {
 

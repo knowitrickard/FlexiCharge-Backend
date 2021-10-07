@@ -1,11 +1,7 @@
 var express = require('express')
-const bodyParser = require('body-parser')
 const jwtAuthz = require('express-jwt-authz');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-
-const AuthMiddleware = require('./middleware/auth.middleware')
-const authMiddleware = new AuthMiddleware()
 
 const AdminCognitoService = require('./services/cognito.admin.config')
 const checkIfAdmin = jwtAuthz(['Admins'], { customScopeKey: 'cognito:groups' });
@@ -46,8 +42,6 @@ module.exports = function () {
                     res.status(200).json(result).end();
                 } else if (result.statusCode === 400) {
                     res.status(400).json(result).end();
-                } else if (result.statusCode === 429) {
-                    res.status(429).json(result).end();
                 } else {
                     console.log(result);
                     res.status(500).json(result).end();
@@ -337,7 +331,6 @@ module.exports = function () {
                     res.status(400).json(result).end();
                 }
             })
-
     })
 
     return router

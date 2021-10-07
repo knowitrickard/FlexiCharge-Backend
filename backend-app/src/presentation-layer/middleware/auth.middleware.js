@@ -1,4 +1,3 @@
-const express = require('express');
 const jwt = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
@@ -40,7 +39,7 @@ class AuthMiddleware {
                 console.log("Payload:");
                 console.log(payload);
             }
-            // next()
+            next()
         })
     }
 
@@ -70,7 +69,7 @@ class AuthMiddleware {
                 const pem = jwkToPem(jwk);
                 pems[key_id] = pem
             });
-            // console.log('Got all pems.');
+            console.log('Got all pems.');
 
         } catch (error) {
             console.log(error);
@@ -98,7 +97,7 @@ class AuthMiddleware {
                 const pem = jwkToPem(jwk);
                 pems[key_id] = pem
             });
-            // console.log('Got all admin pems.');
+            console.log('Got all admin pems.');
 
         } catch (error) {
             console.log(error);
