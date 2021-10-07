@@ -91,9 +91,15 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
 
     router.post('/order', function (request, response) {
 
+<<<<<<< HEAD
         const { transactionID, authorization_token, billing_address, shipping_address } = request.body;
 
         databaseInterfaceTransactions.createKlarnaOrder(transactionID, authorization_token, billing_address, shipping_address, function (error, klarnaOrder) {
+=======
+        const { transactionID, authorization_token } = request.body;
+
+        databaseInterfaceTransactions.createKlarnaOrder(transactionID, authorization_token, function (error, klarnaOrder) {
+>>>>>>> 2f3dd375bf688ef4f18c20ea97f6845f881c34b0
             console.log(error);
             console.log(klarnaOrder);
             if (error.length === 0) {
@@ -109,6 +115,10 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
     router.post('/session', function (request, response) {
         const userID = request.body.userID
         const chargerID = request.body.chargerID
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 2f3dd375bf688ef4f18c20ea97f6845f881c34b0
         databaseInterfaceTransactions.getNewKlarnaPaymentSession(userID, chargerID, function (error, klarnaSessionTransaction) {
             if (error.length > 0) {
                 response.status(400).json(error)
@@ -120,6 +130,7 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
         })
     })
 
+<<<<<<< HEAD
     router.put('/stop/:transactionID', function (request, response) {
         const transactionID = request.params.transactionID
         const chargerID = request.body.chargerID
@@ -132,6 +143,10 @@ module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
                 response.status(500).json(error)
             }
         })
+=======
+    router.put('/stop/:transactionID', function(request, response){
+        
+>>>>>>> 2f3dd375bf688ef4f18c20ea97f6845f881c34b0
     })
 
     return router

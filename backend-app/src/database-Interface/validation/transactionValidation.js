@@ -65,7 +65,7 @@ module.exports = function({}) {
         if (client_token === undefined) {
             validationErrors.push("invalidClientToken")
         } else {
-            if (typeof client_token !== 'text') {
+            if (typeof client_token !== 'string') {
                 validationErrors.push("invalidDataType")
             }
             if (client_token.length < MIN_CLIENT_TOKEN) {
@@ -83,6 +83,8 @@ module.exports = function({}) {
                 validationErrors.push("invalidPaymentMethodCategories")
             }
         }
+
+        return validationErrors
     }
 
     return exports

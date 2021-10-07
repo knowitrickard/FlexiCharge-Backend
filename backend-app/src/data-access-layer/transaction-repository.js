@@ -85,6 +85,20 @@ module.exports = function({ databaseInit }) {
                 callback(e, [])
             })
     }
+    exports.updateTransactionPaymentConfirmed = function(transactionID, isPaymentConfirmed, callback) {
+        databaseInit.Transactions.update({
+                paymentConfirmed: isPaymentConfirmed
+            }, {
+                where: { transactionID: transactionID },
+                returning: true,
+                raw: true
+            })
+            .then(transaction => callback([], transaction[1]))
+            .catch(e => {
+                console.log(e)
+                callback(e, [])
+            })
+    }
     exports.updateTransactionChargingStatus = function(transactionID, kwhTransfered, currentChargePercentage, callback) {
         databaseInit.Transactions.update({
                 kwhTransfered: kwhTransfered,
