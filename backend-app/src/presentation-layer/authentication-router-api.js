@@ -65,11 +65,8 @@ module.exports = function () {
             .then(result => {
                 if (result.statusCode === 200) {
                     res.status(200).json(result.data).end();
-                } else if (result.statusCode === 400) {
-                    res.status(400).json(result).end();
                 } else {
-                    res.status(result.statusCode).json(result).end();
-
+                    res.status(400).json(result).end();
                 }
             })
 
