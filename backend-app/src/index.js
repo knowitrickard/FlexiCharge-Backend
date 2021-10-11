@@ -8,15 +8,17 @@ container.register({
     dataAccessLayerReservation: awilix.asFunction(require('./data-access-layer/reservation-repository')),
     dataAccessLayerTransaction: awilix.asFunction(require('./data-access-layer/transaction-repository')),
     dataAccessLayerChargePoint: awilix.asFunction(require('./data-access-layer/charge-point-repository')),
+    dataAccessLayerKlarna: awilix.asFunction(require('./data-access-layer/billing/klarna-repository')),
+    databaseInit: awilix.asFunction(require('./data-access-layer/db')),
+
+    //Database error
+    dbErrorCheck: awilix.asFunction(require('./database-Interface/error/database-error-check')),
 
     //Business logic layers
     databaseInterfaceCharger: awilix.asFunction(require('./database-Interface/database-interface-charger')),
     databaseInterfaceTransactions: awilix.asFunction(require('./database-Interface/database-interface-transaction')),
     databaseInterfaceReservations: awilix.asFunction(require('./database-Interface/database-interface-reservations')),
     databaseInterfaceChargePoint: awilix.asFunction(require('./database-Interface/database-interface-charge-point')),
-    databaseInit: awilix.asFunction(require('./data-access-layer/db')),
-    //Database error
-    dbErrorCheck: awilix.asFunction(require('./database-Interface/error/database-error-check')),
 
     //Validation
     chargerValidation: awilix.asFunction(require("./database-Interface/validation/chargerValidation")),

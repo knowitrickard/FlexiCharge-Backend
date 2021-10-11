@@ -1,11 +1,11 @@
-module.exports = function({ dataAccessLayerReservation, reservationValidation, dbErrorCheck }) {
+module.exports = function ({ dataAccessLayerReservation, reservationValidation, dbErrorCheck }) {
 
     const exports = {}
 
-    exports.getReservation = function(reservationID, callback) {
-        dataAccessLayerReservation.getReservation(reservationID, function(error, reservation) {
+    exports.getReservation = function (reservationID, callback) {
+        dataAccessLayerReservation.getReservation(reservationID, function (error, reservation) {
             if (Object.keys(error).length > 0) {
-                dbErrorCheck.checkError(error, function(errorCode) {
+                dbErrorCheck.checkError(error, function (errorCode) {
                     callback(errorCode, [])
                 })
             } else {
@@ -14,10 +14,10 @@ module.exports = function({ dataAccessLayerReservation, reservationValidation, d
         })
     }
 
-    exports.getReservationForCharger = function(chargerID, callback) {
-        dataAccessLayerReservation.getReservationForCharger(chargerID, function(error, chargerReservation) {
+    exports.getReservationForCharger = function (chargerID, callback) {
+        dataAccessLayerReservation.getReservationForCharger(chargerID, function (error, chargerReservation) {
             if (Object.keys(error).length > 0) {
-                dbErrorCheck.checkError(error, function(errorCode) {
+                dbErrorCheck.checkError(error, function (errorCode) {
                     callback(errorCode, [])
                 })
             } else {
@@ -30,10 +30,10 @@ module.exports = function({ dataAccessLayerReservation, reservationValidation, d
         })
     }
 
-    exports.getReservationForUser = function(userID, callback) {
-        dataAccessLayerReservation.getReservationForUser(userID, function(error, userReservation) {
+    exports.getReservationForUser = function (userID, callback) {
+        dataAccessLayerReservation.getReservationForUser(userID, function (error, userReservation) {
             if (Object.keys(error).length > 0) {
-                dbErrorCheck.checkError(error, function(errorCode) {
+                dbErrorCheck.checkError(error, function (errorCode) {
                     callback(errorCode, [])
                 })
             } else {
@@ -46,14 +46,14 @@ module.exports = function({ dataAccessLayerReservation, reservationValidation, d
         })
     }
 
-    exports.addReservation = function(chargerID, userID, start, end, callback) {
+    exports.addReservation = function (chargerID, userID, start, end, callback) {
         const validationError = reservationValidation.getAddReservationValidation(start, end)
         if (validationError.length > 0) {
             callback(validationError, [])
         } else {
-            dataAccessLayerReservation.addReservation(chargerID, userID, start, end, function(error, reservationId) {
+            dataAccessLayerReservation.addReservation(chargerID, userID, start, end, function (error, reservationId) {
                 if (Object.keys(error).length > 0) {
-                    dbErrorCheck.checkError(error, function(errorCode) {
+                    dbErrorCheck.checkError(error, function (errorCode) {
                         callback(errorCode, [])
                     })
                 } else {
@@ -63,10 +63,10 @@ module.exports = function({ dataAccessLayerReservation, reservationValidation, d
         }
     }
 
-    exports.removeReservation = function(reservationID, callback) {
-        dataAccessLayerReservation.removeReservation(reservationID, function(error, removeReservation) { //removeReservation = bool
+    exports.removeReservation = function (reservationID, callback) {
+        dataAccessLayerReservation.removeReservation(reservationID, function (error, removeReservation) { //removeReservation = bool
             if (Object.keys(error).length > 0) {
-                dbErrorCheck.checkError(error, function(errorCode) {
+                dbErrorCheck.checkError(error, function (errorCode) {
                     callback(errorCode, [])
                 })
             } else {

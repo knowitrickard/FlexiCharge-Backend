@@ -1,3 +1,4 @@
+const { truncate } = require('fs/promises');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize('postgres', 'postgres', 'postgres', {
@@ -91,13 +92,29 @@ const Transactions = sequelize.define('Transactions', {
         allowNull: false
     },
     paymentID: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: true
     },
     userID: {
         type: DataTypes.STRING,
         allowNull: true
-    }
+    },
+    payment_method_categories: {
+        type: DataTypes.ARRAY(DataTypes.JSON),
+        allowNull: true
+    },
+    session_id: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    client_token: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    paymentConfirmed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+    },
 }, {
     timestamps: false
 });
@@ -136,7 +153,7 @@ const ChargePoints = sequelize.define('ChargePoints', {
 Reservations.hasOne(Reservations, { foreignKey: 'chargerID', onDelete: 'cascade' })
 Reservations.belongsTo(Chargers, { foreignKey: 'chargerID', onDelete: 'cascade' })
 
-Transactions.hasOne(Transactions, { foreignKey: 'chargerID', onDelete: 'cascade' })
+// Transactions.hasOne(Transactions, { foreignKey: 'chargerID', onDelete: 'cascade' })
 Transactions.belongsTo(Chargers, { foreignKey: 'chargerID', onDelete: 'cascade' })
 
 // Chargers.hasOne(Chargers, { foreignKey: 'chargePointID', onDelete: 'cascade' })
@@ -149,7 +166,7 @@ sequelize.sync().then(function() {
                 name: 'Jönköping University',
                 location: [57.777714, 14.163010],
                 price: 44.52,
-                klarnaReservationAmount: 300
+                klarnaReservationAmount: 30000
             });
             // Chargers.create({
             //     chargerID: 100000,
@@ -166,9 +183,8 @@ sequelize.sync().then(function() {
             //     chargePointID: 1
             // });
             Transactions.create({
-                chargerID: 1,
-                paymentID: 1,
-                userID: 1,
+                paymentID: null,
+                userID: "1",
                 timestamp: 1631522252,
                 isKlarnaPayment: true,
                 kwhTransfered: 5,
@@ -185,7 +201,7 @@ sequelize.sync().then(function() {
     })
 })
 
-module.exports = function({}) {
+module.exports = function ({ }) {
     const exports = { Chargers, Transactions, Reservations, ChargePoints }
     return exports
 }

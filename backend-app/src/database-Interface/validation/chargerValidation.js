@@ -79,20 +79,20 @@ module.exports = function({}) {
     }
 
     exports.getUpdateChargerStatusValidation = function(status) {
-        const ValidationErrors = []
+        const validationErrors = []
 
         if (status === undefined) {
-            ValidationErrors.push("invalidStatus")
+            validationErrors.push("invalidStatus")
         } else {
             if (typeof status !== 'string') {
                 ValidationErrors.push("invalidDataType")
             }
             if (!statusCodes.includes(status)) {
-                ValidationErrors.push("invalidStatus")
+                validationErrors.push("invalidStatus")
             }
         }
 
-        return ValidationErrors
+        return validationErrors
     }
 
     return exports

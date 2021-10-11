@@ -1,6 +1,4 @@
 var express = require('express')
-const AuthMiddleware = require('./middleware/auth.middleware')
-const authMiddleware = new AuthMiddleware()
 
 module.exports = function ({ databaseInterfaceChargePoint }) {
 
@@ -19,7 +17,6 @@ module.exports = function ({ databaseInterfaceChargePoint }) {
     })
 
     router.get('/:id', function (request, response) {
-        //authMiddleware.verifyToken(request, response);
         const chargePointId = request.params.id
         databaseInterfaceChargePoint.getChargePoint(chargePointId, function (error, chargePoint) {
             if (error.length == 0 && chargePoint.length == 0) {
@@ -33,7 +30,6 @@ module.exports = function ({ databaseInterfaceChargePoint }) {
     })
 
     router.post('/', function (request, response) {
-        //authMiddleware.verifyToken(request, response);
         const name = request.body.name
         const location = request.body.location
         const price = request.body.price
@@ -49,14 +45,13 @@ module.exports = function ({ databaseInterfaceChargePoint }) {
         })
     })
     router.delete('/:id', function (request, response) {
-        //authMiddleware.verifyToken(request, response);
         const chargePointId = request.params.id;
-        databaseInterfaceChargePoint.removeChargePoint(chargePointId, function(error, chargePointRemoved){
-            if(error.length == 0 && chargePointRemoved){
+        databaseInterfaceChargePoint.removeChargePoint(chargePointId, function (error, chargePointRemoved) {
+            if (error.length == 0 && chargePointRemoved) {
                 response.status(204).json()
-            }else if(error.length == 0 && !chargePointRemoved){
+            } else if (error.length == 0 && !chargePointRemoved) {
                 response.status(404).json()
-            }else{
+            } else {
                 response.status(500).json(error)
             }
         })

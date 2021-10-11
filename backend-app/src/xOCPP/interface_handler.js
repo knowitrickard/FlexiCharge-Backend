@@ -58,8 +58,8 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
     exports.handleReserveNowResponse = function (chargerID, uniqueID, response) {
 
         let status = response[c.PAYLOAD_INDEX].status
-        console.log("\nGot response on about the reservation from charger"
-            + chargerID + ": " + status)
+        console.log("\nCharger "+chargerID+" responded to ReserveNow request: "+status)
+
         callback = v.getCallback(uniqueID)
         v.removeCallback(uniqueID)
 
@@ -67,10 +67,10 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
 
             databaseInterfaceCharger.updateChargerStatus(chargerID, c.RESERVED, function (error, charger) {
                 if (error.length > 0) {
-                    console.log("Error updating charger status in DB: " + error)
+                    console.log("\nError updating charger status in DB: " + error)
                     callback(c.INTERNAL_ERROR, null)
                 } else {
-                    console.log("Charger updated in DB: " + charger.status)
+                    console.log("\nCharger updated in DB: " + charger.status)
                     callback(null, status)
                 }
             })
@@ -107,10 +107,10 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
         if (status == c.ACCEPTED) {
             databaseInterfaceCharger.updateChargerStatus(chargerID, c.CHARGING, function (error, charger) {
                 if (error.length > 0) {
-                    console.log("Error updating charger status in DB: " + error)
+                    console.log("\nError updating charger status in DB: " + error)
                     callback(c.INTERNAL_ERROR, null)
                 } else {
-                    console.log("Charger updated in DB: " + charger.status)
+                    console.log("\nCharger updated in DB: " + charger.status)
                     callback(null, status)
                 }
             })
@@ -144,10 +144,10 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
         if (status == c.ACCEPTED) {
             databaseInterfaceCharger.updateChargerStatus(chargerID, c.AVAILABLE, function (error, charger) {
                 if (error.length > 0) {
-                    console.log("Error updating charger status in DB: " + error)
+                    console.log("\nError updating charger status in DB: " + error)
                     callback(c.INTERNAL_ERROR, null)
                 } else {
-                    console.log("Charger updated in DB: " + charger.status)
+                    console.log("\nCharger updated in DB: " + charger.status)
                     callback(null, status)
                 }
             })

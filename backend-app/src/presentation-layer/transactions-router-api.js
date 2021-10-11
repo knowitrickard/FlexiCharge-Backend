@@ -1,8 +1,6 @@
-const { response } = require('express')
 var express = require('express')
-const AuthMiddleware = require('./middleware/auth.middleware')
-const authMiddleware = new AuthMiddleware()
-module.exports = function ({ databaseInterfaceTransactions }) {
+
+module.exports = function ({ databaseInterfaceTransactions, ocppInterface }) {
 
     const router = express.Router()
     router.get('/:id', function (request, response) {
@@ -55,14 +53,13 @@ module.exports = function ({ databaseInterfaceTransactions }) {
                 response.status(500).json(errors)
             }
         })
-
     })
 
 
     router.put('/payment/:transactionID', function (request, response) {
         const transactionId = request.params.transactionID
         const paymentId = request.body.paymentID
-        dataAccessLayerTransaction.updateTransactionPayment(transactionId, paymentId, function (error, updatedTransactionPayment) {
+        databaseInterfaceTransactions.updateTransactionPayment(transactionId, paymentId, function (error, updatedTransactionPayment) {
             if (error.length == 0) {
                 response.status(201).json(updatedTransactionPayment)
             } else {
@@ -92,14 +89,28 @@ module.exports = function ({ databaseInterfaceTransactions }) {
         })
     })
 
-    router.post('/order', function(request, response){
+    router.post('/order', function (request, response) {
+
+        const { transactionID, authorization_token } = request.body;
+
+        databaseInterfaceTransactions.createKlarnaOrder(transactionID, authorization_token, function (error, klarnaOrder) {
+            console.log(error);
+            console.log(klarnaOrder);
+            if (error.length === 0) {
+                response.status(201).json(klarnaOrder)
+            } else if (error.includes("internalError") || error.includes("dbError")) {
+                response.status(500).json(error)
+            } else {
+                response.status(400).json(error);
+            }
+        })
     })
 
-    router.post('/session', function(request, response){
+    router.post('/session', function (request, response) {
         const userID = request.body.userID
         const chargerID = request.body.chargerID
-        const order_lines = request.body.order_lines
-        databaseInterfaceTransactions.getNewKlarnaPaymentSession(userID, chargerID, order_lines, function(error, klarnaSessionTransaction){
+
+        databaseInterfaceTransactions.getNewKlarnaPaymentSession(userID, chargerID, function (error, klarnaSessionTransaction) {
             if (error.length > 0) {
                 response.status(400).json(error)
             } else if (klarnaSessionTransaction) {
@@ -110,12 +121,18 @@ module.exports = function ({ databaseInterfaceTransactions }) {
         })
     })
 
-    router.put('/start/:transactionID', function(request, response){
-        
-    })
-
-    router.put('/stop/:transactionID', function(request, response){
-        
+    router.put('/stop/:transactionID', function (request, response) {
+        const transactionID = request.params.transactionID
+        const chargerID = request.body.chargerID
+        ocppInterface.remoteStopTransaction(transactionID, chargerID, function (error, stoppedTransaction) {
+            if (error.length > 0) {
+                response.status(400).json(error)
+            } else if (stoppedTransaction) {
+                response.status(200).json(stoppedTransaction)
+            } else {
+                response.status(500).json(error)
+            }
+        })
     })
 
     return router
