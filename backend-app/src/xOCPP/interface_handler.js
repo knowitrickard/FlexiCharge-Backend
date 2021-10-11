@@ -3,33 +3,39 @@ module.exports = function ({ func, constants, v, databaseInterfaceCharger }) {
 
     exports.interfaceHandler = function (chargerID, action, payload, callback) {
 
-        const socket = v.getConnectedSocket(chargerID)
-
-        if (socket != null) {
-
-            var message = ""
-
-            switch (action) {
-
-                case c.RESERVE_NOW:
-                    message = sendReserveNowCall(chargerID, action, payload, callback)
-                    break
-
-                case c.REMOTE_START_TRANSACTION:
-                    message = sendRemoteStartCall(chargerID, action, payload, callback)
-                    break;
-                
-                case c.REMOTE_STOP_TRANSACTION:
-                    message = sendRemoteStopCall(chargerID, action, payload, callback)
-                    break;
+        try {
+            const socket = v.getConnectedSocket(chargerID)
+    
+            if (socket != null) {
+    
+                var message = ""
+    
+                switch (action) {
+    
+                    case c.RESERVE_NOW:
+                        message = sendReserveNowCall(chargerID, action, payload, callback)
+                        break
+    
+                    case c.REMOTE_START_TRANSACTION:
+                        message = sendRemoteStartCall(chargerID, action, payload, callback)
+                        break;
+                    
+                    case c.REMOTE_STOP_TRANSACTION:
+                        message = sendRemoteStopCall(chargerID, action, payload, callback)
+                        break;
+                }
+    
+                socket.send(message)
+    
+            } else {
+                console.log("Got no valid chargerID from API.")
+                callback(null, c.INVALID_ID)
             }
-
-            socket.send(message)
-
-        } else {
-            console.log("Got no valid chargerID from API.")
-            callback(null, c.INVALID_ID)
+            
+        } catch (error) {
+            callback(null, error.toString())
         }
+
 
     }
 

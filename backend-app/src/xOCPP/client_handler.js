@@ -1,34 +1,39 @@
 module.exports = function ({ databaseInterfaceCharger, messageHandler, v, constants, func, test }) {
     const c = constants.get()
+    
     exports.handleClient = function (clientSocket, chargerSerial) {
 
         var messageCache = ""
 
-        isValidClient(clientSocket, chargerSerial, function (chargerID) {
-            if (chargerID) {
-                console.log("Charger with ID: " + chargerID + " connected to the system.")
-                console.log("Number of connected chargers: " + v.getLengthConnectedSockets() + " (" + v.getLengthChargerSerials() + ")" + " (" + v.getLengthChargerIDs() + ")")
-                if (messageCache != "") {
-
-                    /*****************************************
-                     used for internal testing, remove before production
-                     *****************************************/
-                    var test = false
-                    test = testSwitch(messageCache, clientSocket)
-                    /*****************************************/
-
-                    if (!test) {
-                        messageHandler.handleMessage(messageCache, clientSocket, chargerID)
+        isValidClient(clientSocket, chargerSerial, function (error, chargerID) {
+            if (error == null ) {
+                if (chargerID) {
+                    console.log("Charger with ID: " + chargerID + " connected to the system.")
+                    console.log("Number of connected chargers: " + v.getLengthConnectedSockets() + " (" + v.getLengthChargerSerials() + ")" + " (" + v.getLengthChargerIDs() + ")")
+                    if (messageCache != "") {
+    
+                        /*****************************************
+                         used for internal testing, remove before production
+                         *****************************************/
+                        var test = false
+                        test = testSwitch(messageCache, clientSocket)
+                        /*****************************************/
+    
+                        if (!test) {
+                            messageHandler.handleMessage(messageCache, clientSocket, chargerID)
+                        }
+    
                     }
-
+    
+                } else {
+                    console.log("Charger with serial # " + chargerSerial + " was refused connection.\nReason: Charger not found in system.")
+                    let message = func.buildJSONMessage([c.CALL_ERROR, 1337, c.SECURITY_ERROR,
+                        "Serial number was not found in database.", {}])
+                    clientSocket.send(message)
+                    clientSocket.terminate()
                 }
-
             } else {
-                console.log("Charger with serial # " + chargerSerial + " was refused connection.\nReason: Charger not found in system.")
-                let message = func.buildJSONMessage([c.CALL_ERROR, 1337, c.SECURITY_ERROR,
-                    "Serial number was not found in database GTFO", {}])
-                clientSocket.send(message)
-                clientSocket.terminate()
+                func.getGenericError(func.getUniqueId(chargerID, c.INVALID_ID), error.toString())
             }
         })
 
@@ -58,6 +63,7 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
 
             if (errorCodes.length) {
                 console.log(errorCodes)
+                callback(errorCodes[0], false)
             } else {
 
                 if (charger.length != 0) {
@@ -68,9 +74,9 @@ module.exports = function ({ databaseInterfaceCharger, messageHandler, v, consta
                     v.addChargerSerials(chargerSerial)
                     v.addChargerIDs(chargerSerial, chargerID)
 
-                    callback(chargerID)
+                    callback(null, chargerID)
                 } else {
-                    callback(false)
+                    callback(null, false)
                 }
             }
         })

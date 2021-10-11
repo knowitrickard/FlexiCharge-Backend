@@ -4,6 +4,8 @@ module.exports = function({}){
         
         const constants = {
             INVALID_ID: "InvalidId",
+            INVALID_CHARGE_POINT: "InvalidChargePoint",
+
             SSB: 0,
             CHARGER_PLUS: 1,
             TEST1: "FreeCharger",
@@ -39,6 +41,7 @@ module.exports = function({}){
             GENERIC_ERROR: "GenericError",
             SECURITY_ERROR: "SecurityError",
             RESERVE_NOW: "ReserveNow",
+            DATA_TRANSFER: "DataTransfer",
 
             //Possible status states a charger can have
             AVAILABLE: "Available",

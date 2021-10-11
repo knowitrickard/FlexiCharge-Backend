@@ -10,6 +10,24 @@ module.exports = function ({ v, constants }) {
         return JSON.stringify(message)
     }
 
+    exports.getDataTransferMessage = function (uniqueID, data, isCall) {
+
+        if (isCall) {
+            return exports.buildJSONMessage([c.CALL, uniqueID, c.DATA_TRANSFER, data])
+        } else {
+            // Sending DataTranser as a CALLRESULT is not implemented yet, but the following fields would be required:
+            let dataResponse = {
+                status: "Accepted",
+                data: "Sample response data"
+            }
+            switch (data.messageId) {
+
+                default:
+                    return exports.buildJSONMessage([c.CALL_RESULT, uniqueID, c.DATA_TRANSFER, dataResponse])
+            }
+        }
+    }
+
     exports.getUniqueId = function (chargerID, action) {
         
         return chargerID.toString() + action.toString() + Date.now().toString()
