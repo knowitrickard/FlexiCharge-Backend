@@ -159,22 +159,22 @@ Transactions.belongsTo(Chargers, { foreignKey: 'chargerID', onDelete: 'cascade' 
 // Chargers.hasOne(Chargers, { foreignKey: 'chargePointID', onDelete: 'cascade' })
 Chargers.belongsTo(ChargePoints, { foreignKey: 'chargePointID', onDelete: 'cascade' })
 
-sequelize.sync({ force: true }).then(function () {
-    Chargers.findAndCountAll().then(function ({ rows, count }) {
+sequelize.sync().then(function() {
+    ChargePoints.findAndCountAll().then(function({ rows, count }) {
         if (count < 1) {
-            // ChargePoints.create({
-            //     name: 'Jönköping University',
-            //     location: [57.777714, 14.163010],
-            //     price: 44.52,
-            //     klarnaReservationAmount: 30000
-            // });
-            // Chargers.create({
-            //     chargerID: 100000,
-            //     location: [57.777714, 14.163012],
-            //     serialNumber: 'abc123',
-            //     status: '1',
-            //     chargePointID: 1
-            // });
+            ChargePoints.create({
+                name: 'Jönköping University',
+                location: [57.777714, 14.163010],
+                price: 450,
+                klarnaReservationAmount: 30000
+            });
+            Chargers.create({
+                 chargerID: 100000,
+                 location: [57.777714, 14.163012],
+                 serialNumber: 'abc123',
+                 status: 'Available',
+                chargePointID: 1
+            });
             // Chargers.create({
             //     chargerID: 100001,
             //     location: [57.777714, 14.163016],
@@ -201,7 +201,7 @@ sequelize.sync({ force: true }).then(function () {
     })
 })
 
-module.exports = function ({ }) {
+module.exports = function({}) {
     const exports = { Chargers, Transactions, Reservations, ChargePoints }
     return exports
 }
