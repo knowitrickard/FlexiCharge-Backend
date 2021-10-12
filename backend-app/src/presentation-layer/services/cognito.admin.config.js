@@ -237,12 +237,26 @@ class AdminCognitoService {
         }
     }
 
+    async getUsers(paginationToken, limit = 60, filterAttribute = "username", filterValue = "") {
 
-    async getUsers() {
-        const params = {
-            Limit: 0,
-            UserPoolId: this.userPool
+        const value = filterValue
+        const attribute = filterAttribute
+
+        let params = {
+            Limit: limit,
+            UserPoolId: this.userPool,
+            Filter: `${attribute} ^= \"${value}\"`
         }
+
+        if (paginationToken !== undefined) {
+            params = {
+                PaginationToken: paginationToken,
+                Limit: limit,
+                UserPoolId: this.userPool,
+                Filter: `${attribute} ^= \"${value}\"`
+            }
+        }
+
         try {
             const res = await this.cognitoIdentity.listUsers(params).promise();
             const data = {
@@ -276,11 +290,25 @@ class AdminCognitoService {
         }
     }
 
-    async getAdmins(limit) {
-        const params = {
+    async getAdmins(paginationToken, limit = 60, filterAttribute = "username", filterValue = "") {
+        const value = filterValue
+        const attribute = filterAttribute
+
+        let params = {
             Limit: limit,
-            UserPoolId: this.adminUserPool
+            UserPoolId: this.adminUserPool,
+            Filter: `${attribute} ^= \"${value}\"`
         }
+
+        if (paginationToken !== undefined) {
+            params = {
+                PaginationToken: paginationToken,
+                Limit: limit,
+                UserPoolId: this.adminUserPool,
+                Filter: `${attribute} ^= \"${value}\"`
+            }
+        }
+
         try {
             const res = await this.cognitoIdentity.listUsers(params).promise();
             const data = {

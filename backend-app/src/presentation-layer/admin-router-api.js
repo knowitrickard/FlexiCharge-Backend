@@ -78,11 +78,23 @@ module.exports = function () {
 
     router.get('/users', checkJwt, checkIfAdmin, function (req, res) {
 
-        cognito.getUsers()
+        // req.query.token replaces the + with a space, making the token incorrect
+        const token = req.query.pagination_token
+        const limit = req.query.limit
+        const filterAttribute = req.query.filter_attribute
+        const filterValue = req.query.filter_value
+
+        let paginationToken = undefined
+        if (token) {
+            // re adds the + which makes the token correct again
+            paginationToken = token.replace(/\ /g, '+')
+        }
+
+        cognito.getUsers(paginationToken, limit, filterAttribute, filterValue)
             .then(result => {
                 if (result.statusCode === 200) {
                     console.log(result);
-                    res.status(200).json(result.data.Users).end();
+                    res.status(200).json(result.data).end();
                 } else {
                     console.log(result);
                     res.status(400).json(result).end();
@@ -104,12 +116,22 @@ module.exports = function () {
             })
     })
     router.get('/', checkJwt, checkIfAdmin, function (req, res) {
+        // req.query.token replaces the + with a space, making the token incorrect
+        const token = req.query.pagination_token
+        const limit = req.query.limit
+        const filterAttribute = req.query.filter_attribute
+        const filterValue = req.query.filter_value
 
-        cognito.getAdmins()
+        let paginationToken = undefined
+        if (token) {
+            // re adds the + which makes the token correct again
+            paginationToken = token.replace(/\ /g, '+')
+        }
+
+        cognito.getAdmins(paginationToken, limit, filterAttribute, filterValue)
             .then(result => {
                 if (result.statusCode === 200) {
-                    console.log(result);
-                    res.status(200).json(result.data.Users).end();
+                    res.status(200).json(result.data).end();
                 } else {
                     console.log(result);
                     res.status(400).json(result).end();
@@ -129,7 +151,6 @@ module.exports = function () {
         cognito.createUser(username, password, userAttributes)
             .then(result => {
                 if (result.statusCode === 201) {
-                    console.log(result);
                     res.status(201).json(result.data).end();
                 } else {
                     console.log(result);
@@ -149,7 +170,6 @@ module.exports = function () {
         cognito.createAdmin(username, password, userAttributes)
             .then(result => {
                 if (result.statusCode === 201) {
-                    console.log(result);
                     res.status(201).json(result.data).end();
                 } else {
                     console.log(result);
@@ -164,7 +184,6 @@ module.exports = function () {
         cognito.deleteUser(username)
             .then(result => {
                 if (result.statusCode === 200) {
-                    console.log(result);
                     res.status(200).json(result.data).end();
                 } else if (result.statusCode === 400) {
                     console.log(result);
@@ -182,7 +201,6 @@ module.exports = function () {
         cognito.deleteAdmin(username)
             .then(result => {
                 if (result.statusCode === 200) {
-                    console.log(result);
                     res.status(200).json(result.data).end();
                 } else {
                     console.log(result);
@@ -202,7 +220,6 @@ module.exports = function () {
                     res.status(204).json(result.data).end();
 
                 } else if (result.statusCode === 400) {
-                    console.log(result);
                     res.status(400).json(result).end();
                 } else {
                     console.log(result);
@@ -214,7 +231,6 @@ module.exports = function () {
     router.put('/users/:username/enable', checkJwt, checkIfAdmin, function (req, res) {
         const username = req.params.username;
 
-        console.log("active");
         cognito.enableUser(username)
             .then(result => {
                 if (result.statusCode === 200) {
@@ -233,7 +249,6 @@ module.exports = function () {
     router.put('/users/:username/disable', checkJwt, checkIfAdmin, function (req, res) {
         const username = req.params.username;
 
-        console.log("active");
         cognito.disableUser(username)
             .then(result => {
                 if (result.statusCode === 200) {

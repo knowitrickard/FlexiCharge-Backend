@@ -19,7 +19,7 @@ module.exports = function ({ databaseInterfaceReservations, ocppInterface }) {
         })
     })
 
-    router.get('/userReservation/:userID', /*authenticate,*/ function (request, response) {
+    router.get('/userReservation/:userID', function (request, response) {
         const userId = request.params.userID
 
         ////////////////////////////////////////////////
@@ -89,8 +89,6 @@ module.exports = function ({ databaseInterfaceReservations, ocppInterface }) {
         const reservationId = request.body.reservationId
         const parentIdTag = request.body.parentIdTag
         ocppInterface.reserveNow(chargerId, connectorId, idTag, reservationId, parentIdTag, function (resp, error) {
-            console.log(resp);
-            console.log(error);
             if (error === null && resp != null) {
                 response.status(201).json(resp)
             } else {

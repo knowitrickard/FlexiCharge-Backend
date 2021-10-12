@@ -19,8 +19,6 @@ class CognitoService {
 
     async signUpUser(username, password, userAttributes) {
 
-        console.log(userAttributes);
-
         const params = {
             Username: username,
             Password: password,
@@ -171,7 +169,6 @@ class CognitoService {
 
         try {
             const res = await this.cognitoIdentity.forgotPassword(params).promise();
-            console.log(res);
             const data = {
                 data: res,
                 statusCode: 200

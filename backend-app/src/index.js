@@ -31,6 +31,7 @@ container.register({
     reservationsRouter: awilix.asFunction(require('./presentation-layer/reservations-router-api')),
     authenticationRouter: awilix.asFunction(require('./presentation-layer/authentication-router-api')),
     adminRouter: awilix.asFunction(require('./presentation-layer/admin-router-api')),
+    databaseTest: awilix.asFunction(require('./presentation-layer/database-test')), //Remove before production
 
     //ocpp
     ocpp: awilix.asFunction(require('./xOCPP/server_ocpp')),

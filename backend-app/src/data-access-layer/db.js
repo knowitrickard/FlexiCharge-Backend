@@ -159,8 +159,8 @@ Transactions.belongsTo(Chargers, { foreignKey: 'chargerID', onDelete: 'cascade' 
 // Chargers.hasOne(Chargers, { foreignKey: 'chargePointID', onDelete: 'cascade' })
 Chargers.belongsTo(ChargePoints, { foreignKey: 'chargePointID', onDelete: 'cascade' })
 
-sequelize.sync().then(function() {
-    ChargePoints.findAndCountAll().then(function({ rows, count }) {
+sequelize.sync().then(function () {
+    ChargePoints.findAndCountAll().then(function ({ rows, count }) {
         if (count < 1) {
             ChargePoints.create({
                 name: 'Jönköping University',

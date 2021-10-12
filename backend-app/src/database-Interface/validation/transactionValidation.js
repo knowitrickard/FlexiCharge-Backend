@@ -52,35 +52,35 @@ module.exports = function({}) {
         const validationErrors = []
 
         if (session_id === undefined) {
-            validationErrors.push("invalidSessionID")
+            validationErrors.push("klarnaError")
         } else {
             if (typeof session_id !== 'string') {
-                validationErrors.push("invalidDataType")
+                validationErrors.push("klarnaError")
             }
             if (session_id.length < MIN_SESSION_ID) {
-                validationErrors.push("invalidSessionID")
+                validationErrors.push("klarnaError")
             }
         }
 
         if (client_token === undefined) {
-            validationErrors.push("invalidClientToken")
+            validationErrors.push("klarnaError")
         } else {
             if (typeof client_token !== 'string') {
-                validationErrors.push("invalidDataType")
+                validationErrors.push("klarnaError")
             }
             if (client_token.length < MIN_CLIENT_TOKEN) {
-                validationErrors.push("invalidClientToken")
+                validationErrors.push("klarnaError")
             }
         }
 
         if (payment_method_categories === undefined) {
-            validationErrors.push("invalidPaymentMethodCategories")
+            validationErrors.push("klarnaError")
         } else {
             if ((payment_method_categories instanceof Array) == false) {
-                validationErrors.push("invalidDataType")
+                validationErrors.push("klarnaError")
             }
             if (payment_method_categories < MIN_PAYMENT_METHOD_CATEGORIES) {
-                validationErrors.push("invalidPaymentMethodCategories")
+                validationErrors.push("klarnaError")
             }
         }
 
