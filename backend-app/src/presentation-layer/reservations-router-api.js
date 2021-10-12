@@ -76,7 +76,7 @@ module.exports = function ({ databaseInterfaceReservations, ocppInterface }) {
         const idTag = request.body.idTag
         const reservationId = request.body.reservationId
         const parentIdTag = request.body.parentIdTag
-        ocppInterface.reserveNow(chargerId, connectorId, idTag, reservationId, parentIdTag, function (resp, error) {
+        ocppInterface.reserveNow(chargerId, connectorId, idTag, reservationId, parentIdTag, function (error, resp) {
             console.log(resp);
             console.log(error);
             if (error === null && resp != null) {
