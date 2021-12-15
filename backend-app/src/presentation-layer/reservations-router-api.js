@@ -92,7 +92,7 @@ module.exports = function ({ databaseInterfaceReservations, ocppInterface }) {
             if (error === null && resp != null) {
                 response.status(201).json(resp)
             } else {
-                if (error.includes("internalError") || error.includes("dbError")) {
+                if (error.includes("InternalError") || error.includes("InvalidId")) {
                     response.status(500).json(error)
                 } else {
                     response.status(404).json(error)
