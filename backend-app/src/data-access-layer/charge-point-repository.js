@@ -23,8 +23,6 @@ module.exports = function({ databaseInit }) {
     }
 
     exports.addChargePoint = function(name, location, price, klarnaReservationAmount, callback) {
-
-
         const chargePoint = {
             name: name,
             location: location,
